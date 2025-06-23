@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mvc:View
+    controllerName="com.app.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+    xmlns:f="sap.f"
+    xmlns:card="sap.f.cards"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%">
+    <App id="app">
+        <pages>
+            <tnt:ToolPage id="toolPage">
+                <tnt:header>
+                    <tnt:ToolHeader>
+                        <Image height="3rem"
+                            class="sapUiSmallMarginBegin"
+                            src="./assets/PI HUB.png" />
+                        <ToolbarSpacer/>
+                        <IconTabHeader
+                            selectedKey="{/selectedKey}"
+                            items="{/navigation}"
+                            select=".onItemSelect"
+                            mode="Inline"
+                            backgroundDesign="Transparent"
+                            class="nav-center"
+                            expandable="false"
+                            showOverflowSelectList="false">
+                            <items>
+                                <IconTabFilter
+                                    text="{title}"
+                                    key="{key}">
+                                </IconTabFilter>
+                            </items>
+                        </IconTabHeader>
+                        <ToolbarSpacer/>
+                        <core:Icon id="chatbotIcon" src="sap-icon://discussion" class="sapUiSmallMarginEnd" press=".onChatbotPress" tooltip="Ask API"/>
+                        <Avatar id="userAvatar" 
+                            src="./assets/images.png" 
+                            displaySize="XS" 
+                            class="sapUiSmallMarginBegin" 
+                            press=".onAvatarPress"
+                            displayShape="Circle"
+                            backgroundColor="Accent6">
+                            <layoutData>
+                                <OverflowToolbarLayoutData priority="NeverOverflow"/>
+                            </layoutData>
+                        </Avatar>
+                        <Popover id="avatarPopover" 
+                            placement="Bottom" 
+                            showHeader="false" 
+                            class="sapUiResponsivePadding--header sapUiResponsivePadding--footer">
+                            <List id="avatarList">
+                            </List>
+                        </Popover>
+                    </tnt:ToolHeader>
+                </tnt:header>
+                <tnt:mainContents>
+                    <HBox fitContainer="true" renderType="Bare" class="sapUiNoContentPadding">
+                        <NavContainer id="navContainer" class="main-content-container" width="100%" flexGrow="1"/>
+                        <VBox id="chatbotPanel" width="400px" class="chatbot-panel sapUiNoContentPadding" visible="{viewModel>/isChatbotOpen}" flexShrink="0">
+                            <Toolbar class="sapUiSmallMarginBottom">
+                                <Title text="API Chatbot"/>
+                                <ToolbarSpacer/>
+                                <Button icon="sap-icon://decline" press=".onChatbotClose" type="Transparent" tooltip="Close Chat"/>
+                            </Toolbar>
+                            <ScrollContainer
+                                id="chatMessagesContainer"
+                                height="100%"
+                                width="100%"
+                                horizontal="false"
+                                vertical="true"
+                                class="sapUiSmallMarginBottom">
+                                <VBox id="chatMessages" class="sapUiSmallMargin">
+                                </VBox>
+                            </ScrollContainer>
+                            <HBox width="100%" class="sapUiSmallMarginTopBottom sapUiSmallMarginBeginEnd">
+                                <Input id="chatInput" placeholder="Type your message..." width="100%" liveChange=".onChatInputLiveChange"/>
+                                <Button id="sendChatButton" icon="sap-icon://paper-plane" type="Emphasized" press=".onSendChatMessage" class="sapUiTinyMarginBegin" enabled="false"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                    <Toolbar class="appFooter">
+                        <Text text="© 2023 Your Company Name. All rights reserved." />
+                    </Toolbar>
+                </tnt:mainContents>
+            </tnt:ToolPage>
+        </pages>
+    </App>
+</mvc:View> 

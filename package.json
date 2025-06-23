@@ -1,0 +1,84 @@
+{
+    "name": "app",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@cap-js/hana": "^1",
+        "@sap-cloud-sdk/http-client": "^4.0.2",
+        "@sap-cloud-sdk/util": "^4.0.2",
+        "@sap/cds": "^8",
+        "@sap/hana-client": "^2.24.26",
+        "@sap/low-code-event-handler": "^1.2.5",
+        "@sap/xsenv": ">=3.3.2 <3.3.3",
+        "@sap/xssec": "^4.8.0",
+        "express": "^4",
+        "bcrypt": "^6.0.0",
+        "hdb": "^0.19.12",
+        "passport": "^0.7.0"
+    },
+    "devDependencies": {
+        "@cap-js/sqlite": "^1",
+        "@sap/dev-cap-tools": "^1.31.0"
+    },
+    "scripts": {
+        "start": "cds-serve",
+        "start-local": "npm run generate-entry-point && npm run cds-watch",
+        "generate-entry-point": "dev-cap-tools gen-entrypoint",
+        "cds-watch": "cds watch --open"
+    },
+    "cds": {
+    "deploy": {
+      "to": "hana",
+      "force": true
+    },
+    "build": {
+      "target": ".",
+      "tasks": [
+        {
+          "src": "db",
+          "for": "hana",
+          "options": {
+            "model": [
+              "db",
+              "srv",
+              "app"
+            ],
+            "namespace": "apiapp"
+          }
+        },
+        {
+          "src": "srv",
+          "for": "node-cf"
+        }
+      ]
+    },
+    "requires": {
+      "[development]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "database": "db/local.sqlite"
+          }
+        },
+        "auth": {
+          "kind": "mocked"
+        }
+      },
+      "[production]": {
+        "db": {
+          "kind": "hana",
+          "vcap": {
+            "service": "APIapp-db"
+          }
+        },
+        "auth": {
+          "kind": "xsuaa"
+        }
+      }
+    }
+  },
+  "lcap": true
+}

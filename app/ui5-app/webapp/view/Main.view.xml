@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mvc:View
+    controllerName="com.app.controller.Main"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns:f="sap.f"
+    xmlns:card="sap.f.cards"
+    xmlns:core="sap.ui.core"
+    height="100%">
+    <ScrollContainer
+        id="page1"
+        horizontal="false"
+        vertical="true"
+        height="100%"
+        width="100%" >
+        <VBox alignItems="Center" width="100%" >
+            <VBox class="hero-section" width="100%">
+                <Image src="./assets/bglp.png" width="100%" class="sapFECardImage card-background-image"/>
+                <VBox class="full-overlay-content" alignItems="Center" justifyContent="Center">
+                    <VBox class="card-overlay-text">
+                        <Title text="API Hub" level="H1" class="sub-title" id="subTitle"/>
+                        <Title text="Your Central Gateway to Seamless Integration" class="main-title" id="mainTitle"/>
+                        <Text text="Discover, manage, and optimize APIs with ease. API Hub empowers developers and businesses to connect systems, accelerate innovation, and build intelligent solutions." class="description-text" id="descriptionText"/>
+                    </VBox>
+                    <SearchField 
+                        id="searchField" 
+                        placeholder="Search APIs" 
+                        class="card-overlay-search"
+                        visible="true">
+                        <layoutData>
+                            <OverflowToolbarLayoutData priority="NeverOverflow" />
+                        </layoutData>
+                    </SearchField>
+                </VBox>
+                <Button visible="true" icon="sap-icon://search" type="Transparent" id="searchButton" tooltip="Search" class="card-overlay-button"/>
+            </VBox>
+            <VBox width="100%" class="sapUiMediumMarginTop" alignItems="Center">
+                <Title text="Services" class="services-title"/>
+                <HBox class="services-cards-container">
+                    <VBox class="service-card">
+                        <VBox class="service-icon-container">
+                            <core:Icon src="sap-icon://search" class="service-icon"/>
+                        </VBox>
+                        <VBox class="service-card-content">
+                            <Title text="Explore API" class="service-card-title"/>
+                            <Text text="Discover and explore available APIs" class="service-card-text"/>
+                        </VBox>
+                    </VBox>
+                    <VBox class="service-card">
+                        <VBox class="service-icon-container">
+                            <core:Icon src="sap-icon://settings" class="service-icon"/>
+                        </VBox>
+                        <VBox class="service-card-content">
+                            <Title text="Manage API" class="service-card-title"/>
+                            <Text text="Manage and monitor your APIs" class="service-card-text"/>
+                        </VBox>
+                    </VBox>
+                    <VBox class="service-card">
+                        <VBox class="service-icon-container">
+                            <core:Icon src="sap-icon://message-information" class="service-icon"/>
+                        </VBox>
+                        <VBox class="service-card-content">
+                            <Title text="Ask API" class="service-card-title"/>
+                            <Text text="Need help? Just ask. Our AI-powered chatbot is ready to answer your questions, guide you through usage, and provide instant access to the documentation you need." class="service-card-text"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+    </ScrollContainer>
+</mvc:View>

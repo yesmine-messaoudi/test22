@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    
+    <Dialog
+        id="signInDialog"
+        title="Sign In"
+        class="sapUiResponsiveContentPadding">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Label text="Email" labelFor="signInEmail" required="true"/>
+                <Input
+                    id="signInEmail"
+                    type="Email"
+                    placeholder="Enter your email"
+                    valueStateText="Email must end with @aymax.fr"
+                    class="sapUiSmallMarginBottom"/>
+                
+                <Label text="Password" labelFor="signInPassword" required="true"/>
+                <Input
+                    id="signInPassword"
+                    type="Password"
+                    placeholder="Enter your password"
+                    class="sapUiSmallMarginBottom"/>
+            </VBox>
+        </content>
+        <buttons>
+            <Button text="Cancel" press=".onSignInCancel"/>
+            <Button text="Sign In" type="Emphasized" press=".onSignInSubmit"/>
+        </buttons>
+    </Dialog>
+
+    <Dialog
+        id="signUpDialog"
+        title="Sign Up"
+        class="sapUiResponsiveContentPadding">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Label text="Email" labelFor="signUpEmail" required="true"/>
+                <Input
+                    id="signUpEmail"
+                    type="Email"
+                    placeholder="Enter your email"
+                    valueStateText="Email must end with @aymax.fr"
+                    class="sapUiSmallMarginBottom"/>
+                
+                <Label text="First Name" labelFor="signUpFirstName" required="true"/>
+                <Input
+                    id="signUpFirstName"
+                    placeholder="Enter your first name"
+                    class="sapUiSmallMarginBottom"/>
+                
+                <Label text="Last Name" labelFor="signUpLastName" required="true"/>
+                <Input
+                    id="signUpLastName"
+                    placeholder="Enter your last name"
+                    class="sapUiSmallMarginBottom"/>
+                
+                <Label text="Password" labelFor="signUpPassword" required="true"/>
+                <Input
+                    id="signUpPassword"
+                    type="Password"
+                    placeholder="Enter your password"
+                    class="sapUiSmallMarginBottom"/>
+                
+                <Label text="Role" labelFor="signUpRole" required="true"/>
+                <Select
+                    id="signUpRole"
+                    class="sapUiSmallMarginBottom">
+                    <items>
+                        <core:Item text="Admin" key="admin"/>
+                        <core:Item text="Technical Consultant" key="technical consultant"/>
+                        <core:Item text="Functional Consultant" key="functional consultant"/>
+                    </items>
+                </Select>
+            </VBox>
+        </content>
+        <buttons>
+            <Button text="Cancel" press=".onSignUpCancel"/>
+            <Button text="Sign Up" type="Emphasized" press=".onSignUpSubmit"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition> 

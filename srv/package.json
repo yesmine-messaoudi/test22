@@ -1,0 +1,11 @@
+{
+    "name": "app-srv",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "cds run"
+    },
+    "dependencies": {
+      "@sap/cds": "^8.9.4",
+      "@sap/cds-dk": "^8.9.4"
+    }
+  }

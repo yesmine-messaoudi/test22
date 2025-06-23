@@ -1,0 +1,55 @@
+_schema-version: '3.3.0'
+ID: app
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+
+modules:
+  - name: app-srv
+    type: nodejs
+    path: .
+    parameters:
+      memory: 512M
+      disk-quota: 1G
+      buildpack: nodejs_buildpack
+    properties:
+      NODE_MODULES_CACHE: false
+      npm_config_cache: .npmcache
+    requires:
+      - name: app-db
+      - name: app-auth
+
+  - name: app-db-deployer
+    type: hdb
+    path: db/src
+    parameters:
+      buildpack: nodejs_buildpack
+      no-route: true
+      health-check-type: process
+      memory: 512M
+      disk-quota: 1G
+    properties:
+      NODE_MODULES_CACHE: false
+      npm_config_cache: .npmcache
+    requires:
+      - name: app-db
+
+resources:
+  - name: app-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+      config:
+        database_id: "e0703fa6-6b82-4983-a980-59e5752d12bb"
+
+  - name: app-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: app-${org}-${space}
+        tenant-mode: dedicated

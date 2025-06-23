@@ -1,0 +1,17 @@
+{
+    "selectedKey": "page1",
+    "navigation": [
+        {
+            "title": "Home",
+            "key": "page1"
+        },
+        {
+            "title": "Internal API",
+            "key": "page2"
+        },
+        {
+            "title": "Standard API",
+            "key": "page3"
+        }
+    ]
+} 

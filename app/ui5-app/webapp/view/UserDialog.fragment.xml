@@ -1,0 +1,26 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="userDialog" title="{dialogTitle}" class="sapUiResponsiveContentPadding">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Label text="Email" labelFor="userEmail" required="true"/>
+                <Input id="userEmail" type="Email" placeholder="Enter email"/>
+                <Label text="First Name" labelFor="userFirstName" required="true"/>
+                <Input id="userFirstName" placeholder="Enter first name"/>
+                <Label text="Last Name" labelFor="userLastName" required="true"/>
+                <Input id="userLastName" placeholder="Enter last name"/>
+                <Label text="Password" labelFor="userPassword" required="true"/>
+                <Input id="userPassword" type="Password" placeholder="Enter password (leave blank to keep current)"/>
+                <Label text="Role" labelFor="userRole" required="true"/>
+                <Select id="userRole">
+                    <core:Item text="Admin" key="admin"/>
+                    <core:Item text="Technical Consultant" key="technical consultant"/>
+                    <core:Item text="Functional Consultant" key="functional consultant"/>
+                </Select>
+            </VBox>
+        </content>
+        <buttons>
+            <Button text="Cancel" press=".onUserDialogCancel"/>
+            <Button text="Save" type="Emphasized" press=".onUserDialogSave"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition> 
