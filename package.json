@@ -100,10 +100,7 @@
       },
       "[production]": {
         "db": {
-          "kind": "hana",
-          "vcap": {
-            "service": "APIapp-db"
-          }
+          "kind": "hana"
         },
         "auth": {
           "kind": "xsuaa"

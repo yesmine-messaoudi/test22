@@ -11,7 +11,7 @@ build-parameters:
     - builder: custom
       commands:
         - npm ci
-        - npx cds build --production
+        - npx -y -p @sap/cds-dk@8 cds build --production
 
 modules:
   # CAP backend (runs from the project root with `cds-serve`)
