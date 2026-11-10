@@ -7,19 +7,15 @@ sap.ui.define([
 ], function (BaseController, JSONModel, Filter, FilterOperator, Sorter) {
     "use strict";
 
-    // One list page, three flavours: #/apis/standard, #/apis/internal, #/apis/mine
+    // One read-only list page, two flavours: #/apis/standard (SAP APIs) and #/apis/internal
     const KINDS = {
         standard: {
             path: "/StandardAPI", detailKind: "standard",
             title: "standardApisTitle", subtitle: "standardApisSubtitle", noData: "noStandardApis"
         },
         internal: {
-            path: "/InternalApis", detailKind: "internal", showOwner: true,
+            path: "/InternalApis", detailKind: "internal",
             title: "internalApisTitle", subtitle: "internalApisSubtitle", noData: "noInternalApis"
-        },
-        mine: {
-            path: "/InternalApis", detailKind: "internal", isMine: true,
-            title: "myApisTitle", subtitle: "myApisSubtitle", noData: "noMyApis"
         }
     };
 
@@ -40,9 +36,7 @@ sap.ui.define([
                 title: this.getText(oKind.title),
                 subtitle: this.getText(oKind.subtitle),
                 noDataText: this.getText(oKind.noData),
-                tableTitle: this.getText("tableTitleNoCount"),
-                isMine: !!oKind.isMine,
-                showOwner: !!oKind.showOwner
+                tableTitle: this.getText("tableTitleNoCount")
             });
 
             this.byId("searchField").setValue(oQuery.search || "");
@@ -93,9 +87,6 @@ sap.ui.define([
             if (sType && sType !== "all") {
                 aFilters.push(new Filter({ path: "type", operator: FilterOperator.EQ, value1: sType, caseSensitive: false }));
             }
-            if (KINDS[this._sKind].isMine) {
-                aFilters.push(new Filter("createdBy", FilterOperator.EQ, this.getUserId()));
-            }
             return aFilters;
         },
 
@@ -112,11 +103,7 @@ sap.ui.define([
             this.getModel("view").setProperty("/tableTitle", this.getText("tableTitle", [iCount || 0]));
         },
 
-        _refresh: function () {
-            this._oTable.getBinding("items").refresh();
-        },
-
-        /* ---------- Actions ---------- */
+        /* ---------- Navigation ---------- */
 
         onItemPress: function (oEvent) {
             const oContext = oEvent.getSource().getBindingContext();
@@ -124,32 +111,6 @@ sap.ui.define([
                 kind: KINDS[this._sKind].detailKind,
                 id: oContext.getProperty("ID")
             });
-        },
-
-        onCreate: function () {
-            this.openApiDialog(null).then(function (bSaved) {
-                if (bSaved) {
-                    this._refresh();
-                }
-            }.bind(this));
-        },
-
-        onEdit: function (oEvent) {
-            const oApi = oEvent.getSource().getBindingContext().getObject();
-            this.openApiDialog(oApi).then(function (bSaved) {
-                if (bSaved) {
-                    this._refresh();
-                }
-            }.bind(this));
-        },
-
-        onDelete: function (oEvent) {
-            const oApi = oEvent.getSource().getBindingContext().getObject();
-            this.confirmDeleteApi(oApi).then(function (bDeleted) {
-                if (bDeleted) {
-                    this._refresh();
-                }
-            }.bind(this));
         }
     });
 });

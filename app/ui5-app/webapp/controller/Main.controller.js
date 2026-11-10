@@ -17,8 +17,8 @@ sap.ui.define([
             this.getRouter().navTo("apiList", { kind: "standard" });
         },
 
-        onManage: function () {
-            this.getRouter().navTo("apiList", { kind: "mine" });
+        onInternal: function () {
+            this.getRouter().navTo("apiList", { kind: "internal" });
         },
 
         onAskApi: function () {

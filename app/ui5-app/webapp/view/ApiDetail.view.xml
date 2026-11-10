@@ -30,10 +30,6 @@
                 <uxap:expandedContent>
                     <Text text="{description}"/>
                 </uxap:expandedContent>
-                <uxap:actions>
-                    <Button text="{i18n>edit}" type="Emphasized" press=".onEditApi" visible="{view>/canEdit}"/>
-                    <Button text="{i18n>delete}" press=".onDeleteApi" visible="{view>/canEdit}"/>
-                </uxap:actions>
                 <uxap:navigationActions>
                     <Button icon="sap-icon://decline" type="Transparent" tooltip="{i18n>close}" press=".onNavToList"/>
                 </uxap:navigationActions>
@@ -58,10 +54,6 @@
                     <Label text="{i18n>fieldLastModified}"/>
                     <Text text="{lastModified}"/>
                 </VBox>
-                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom" visible="{view>/isInternal}">
-                    <Label text="{i18n>fieldOwner}"/>
-                    <Text text="{createdBy}"/>
-                </VBox>
             </FlexBox>
         </uxap:headerContent>
 
@@ -80,8 +72,6 @@
                                 <headerToolbar>
                                     <OverflowToolbar>
                                         <Title text="{i18n>sectionMethods}" level="H3"/>
-                                        <ToolbarSpacer/>
-                                        <Button text="{i18n>addMethod}" icon="sap-icon://add" press=".onAddMethod" visible="{view>/canEdit}"/>
                                     </OverflowToolbar>
                                 </headerToolbar>
                                 <columns>
@@ -97,9 +87,6 @@
                                     <Column minScreenWidth="Desktop" demandPopin="true">
                                         <Text text="{i18n>fieldSection}"/>
                                     </Column>
-                                    <Column hAlign="End" width="6rem" visible="{view>/canEdit}">
-                                        <Text text="{i18n>colActions}"/>
-                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
@@ -108,10 +95,6 @@
                                             <Text text="{path}" class="apiPath"/>
                                             <Text text="{description}"/>
                                             <Text text="{section}"/>
-                                            <HBox justifyContent="End">
-                                                <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>edit}" press=".onEditMethod"/>
-                                                <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>delete}" press=".onDeleteMethod"/>
-                                            </HBox>
                                         </cells>
                                     </ColumnListItem>
                                 </items>
@@ -135,8 +118,6 @@
                                 <headerToolbar>
                                     <OverflowToolbar>
                                         <Title text="{i18n>sectionOperations}" level="H3"/>
-                                        <ToolbarSpacer/>
-                                        <Button text="{i18n>addOperation}" icon="sap-icon://add" press=".onAddOperation" visible="{view>/canEdit}"/>
                                     </OverflowToolbar>
                                 </headerToolbar>
                                 <columns>
@@ -158,9 +139,6 @@
                                     <Column minScreenWidth="Desktop" demandPopin="true">
                                         <Text text="{i18n>fieldLocation}"/>
                                     </Column>
-                                    <Column hAlign="End" width="6rem" visible="{view>/canEdit}">
-                                        <Text text="{i18n>colActions}"/>
-                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
@@ -171,10 +149,6 @@
                                             <Text text="{transportProtocol}"/>
                                             <Text text="{defaultStyle}"/>
                                             <Text text="{location}" class="apiPath"/>
-                                            <HBox justifyContent="End">
-                                                <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>edit}" press=".onEditOperation"/>
-                                                <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>delete}" press=".onDeleteOperation"/>
-                                            </HBox>
                                         </cells>
                                     </ColumnListItem>
                                 </items>

@@ -1,8 +1,9 @@
 using { apiapp as my } from '../db/schema';
 
 /**
- * Every entity requires the single XSUAA role "APIHubUser"
- * (see xs-security.json). Users get it through the "API Hub User" role collection.
+ * Read-only catalog: the app only reads APIs stored in HANA
+ * (SAP standard APIs and internal APIs) and shows them. Nothing can be created, changed or deleted.
+ * Every entity requires the XSUAA role "APIHubUser" (see xs-security.json).
  */
 @path: '/service/api_management_app'
 service appSrv {
@@ -11,17 +12,15 @@ service appSrv {
   @requires: 'APIHubUser'
   entity StandardAPI as projection on my.StandardAPI;
 
-  // Everyone can read and create; only the owner can change or delete.
-  @restrict: [
-    { grant: ['READ', 'CREATE'], to: 'APIHubUser' },
-    { grant: ['UPDATE', 'DELETE'], to: 'APIHubUser', where: 'createdBy = $user' }
-  ]
+  @readonly
+  @requires: 'APIHubUser'
   entity InternalApis as projection on my.InternalApi;
 
-  // Owner checks for writes are in srv/code/api-item-logic.js
+  @readonly
   @requires: 'APIHubUser'
   entity Methods as projection on my.Method;
 
+  @readonly
   @requires: 'APIHubUser'
   entity Operations as projection on my.Operation;
 

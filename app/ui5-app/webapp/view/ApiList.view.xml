@@ -13,14 +13,6 @@
                 <f:expandedContent>
                     <Text text="{view>/subtitle}"/>
                 </f:expandedContent>
-                <f:actions>
-                    <Button
-                        text="{i18n>createApi}"
-                        icon="sap-icon://add"
-                        type="Emphasized"
-                        press=".onCreate"
-                        visible="{view>/isMine}"/>
-                </f:actions>
             </f:DynamicPageTitle>
         </f:title>
 
@@ -73,14 +65,8 @@
                     <Column>
                         <Text text="{i18n>fieldStatus}"/>
                     </Column>
-                    <Column minScreenWidth="Desktop" demandPopin="true" visible="{view>/showOwner}">
-                        <Text text="{i18n>fieldOwner}"/>
-                    </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
                         <Text text="{i18n>fieldLastModified}"/>
-                    </Column>
-                    <Column hAlign="End" width="6rem" visible="{view>/isMine}">
-                        <Text text="{i18n>colActions}"/>
                     </Column>
                 </columns>
             </Table>
@@ -94,12 +80,7 @@
                     <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
                     <Text text="{version}"/>
                     <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
-                    <Text text="{createdBy}"/>
                     <Text text="{lastModified}"/>
-                    <HBox justifyContent="End">
-                        <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>edit}" press=".onEdit"/>
-                        <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>delete}" press=".onDelete"/>
-                    </HBox>
                 </cells>
             </ColumnListItem>
         </f:dependents>

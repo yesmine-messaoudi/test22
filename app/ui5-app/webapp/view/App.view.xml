@@ -29,9 +29,7 @@
                             <items>
                                 <IconTabFilter key="home" text="{i18n>navHome}"/>
                                 <IconTabFilter key="standard" text="{i18n>navStandardApis}"/>
-                                <IconTabFilter key="internal" text="{i18n>navInternalApis}"/>
-                                <IconTabFilter key="mine" text="{i18n>navMyApis}"/>
-                            </items>
+                                <IconTabFilter key="internal" text="{i18n>navInternalApis}"/>                            </items>
                         </IconTabHeader>
                         <ToolbarSpacer/>
                         <Button

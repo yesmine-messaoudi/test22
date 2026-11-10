@@ -22,7 +22,7 @@
                     class="card-overlay-search"/>
                 <HBox wrap="Wrap" class="hero-actions">
                     <Button text="{i18n>heroExplore}" icon="sap-icon://search" type="Emphasized" press=".onExplore" class="sapUiSmallMarginEnd sapUiSmallMarginTop"/>
-                    <Button text="{i18n>heroCreate}" icon="sap-icon://add" press=".onManage" class="hero-secondary-button sapUiSmallMarginTop"/>
+                    <Button text="{i18n>heroInternal}" icon="sap-icon://course-book" press=".onInternal"class="hero-secondary-button sapUiSmallMarginTop"/>
                 </HBox>
             </VBox>
         </VBox>
@@ -50,15 +50,15 @@
                 <f:Card class="service-card">
                     <f:header>
                         <card:Header
-                            title="{i18n>cardManageTitle}"
-                            subtitle="{i18n>cardManageSubtitle}"
-                            iconSrc="sap-icon://settings"
-                            press=".onManage"/>
+                            title="{i18n>cardInternalTitle}"
+                            subtitle="{i18n>cardInternalSubtitle}"
+                            iconSrc="sap-icon://course-book"
+                            press=".onInternal"/>
                     </f:header>
                     <f:content>
                         <VBox class="service-card-content">
-                            <Text text="{i18n>cardManageText}" class="service-card-text"/>
-                            <Link text="{i18n>cardManageLink}" press=".onManage" class="sapUiSmallMarginTop"/>
+                            <Text text="{i18n>cardInternalText}" class="service-card-text"/>
+                            <Link text="{i18n>cardInternalLink}" press=".onInternal" class="sapUiSmallMarginTop"/>
                         </VBox>
                     </f:content>
                 </f:Card>

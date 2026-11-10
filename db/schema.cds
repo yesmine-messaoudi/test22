@@ -6,8 +6,7 @@ using {
 } from '@sap/cds/common';
 
 /**
- * APIs created by API Hub users.
- * The owner is the user in `createdBy` (filled automatically from the XSUAA login).
+ * Internal APIs (read-only in the app).
  */
 entity InternalApi : cuid, managed {
     title        : String(100) @mandatory;
