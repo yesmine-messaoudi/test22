@@ -1,6 +1,8 @@
 <mvc:View
     controllerName="com.app.controller.ApiList"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:grid="sap.ui.layout.cssgrid"
     xmlns="sap.m"
     xmlns:f="sap.f"
     height="100%">
@@ -38,72 +40,68 @@
         </f:header>
 
         <f:content>
-            <Table
-                id="apiTable"
+            <!-- Cards grid; bound in the controller depending on the page -->
+            <f:GridList
+                id="apiGrid"
                 growing="true"
-                growingThreshold="20"
+                growingThreshold="24"
                 growingScrollToLoad="true"
-                sticky="HeaderToolbar,ColumnHeaders"
                 noDataText="{view>/noDataText}"
-                class="apiTable"
-                width="auto">
-                <headerToolbar>
-                    <OverflowToolbar>
+                class="apiGrid">
+                <f:headerToolbar>
+                    <Toolbar style="Clear" class="apiGridToolbar">
                         <Title text="{view>/tableTitle}" level="H3"/>
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column>
-                        <Text text="{= ${view>/isInternal} ? ${i18n>colDocument} : ${i18n>colApi} }"/>
-                    </Column>
-                    <Column width="7rem" hAlign="Center" minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
-                        <Text text="{i18n>fieldType}"/>
-                    </Column>
-                    <Column width="6rem" hAlign="Center" minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
-                        <Text text="{i18n>fieldVersion}"/>
-                    </Column>
-                    <Column width="8rem" visible="{= !${view>/isInternal} }">
-                        <Text text="{i18n>fieldStatus}"/>
-                    </Column>
-                    <Column width="14rem" minScreenWidth="Tablet" demandPopin="true" visible="{view>/isInternal}">
-                        <Text text="{i18n>fieldAuthor}"/>
-                    </Column>
-                    <Column width="9rem" hAlign="End" minScreenWidth="Desktop" demandPopin="true">
-                        <Text text="{i18n>fieldLastModified}"/>
-                    </Column>
-                </columns>
-            </Table>
+                    </Toolbar>
+                </f:headerToolbar>
+                <f:customLayout>
+                    <grid:GridBoxLayout boxMinWidth="19rem"/>
+                </f:customLayout>
+            </f:GridList>
         </f:content>
 
         <f:dependents>
-            <!-- Row templates; the table is bound in the controller depending on the page.
-                 Both have one cell per column (hidden columns hide their cells). -->
-            <ColumnListItem id="standardItemTemplate" type="Navigation" press=".onItemPress">
-                <cells>
-                    <VBox class="apiNameCell">
-                        <Text text="{title}" class="apiName"/>
-                        <Text text="{description}" maxLines="2" class="apiDescription" visible="{= !!${description} }"/>
+            <!-- SAP standard API card -->
+            <f:GridListItem id="standardItemTemplate" type="Active" press=".onItemPress" class="apiCardItem">
+                <VBox class="apiCard" justifyContent="SpaceBetween" height="100%">
+                    <VBox>
+                        <HBox alignItems="Start" class="apiCardHeader">
+                            <core:Icon src="{path: 'type', formatter: '.formatter.typeIcon'}" size="1.5rem" class="apiCardIcon"/>
+                            <VBox class="apiCardHeading">
+                                <Text text="{title}" maxLines="2" class="apiName"/>
+                                <Text text="{path: 'type', formatter: '.formatter.typeText'}" class="apiCardSubtitle"/>
+                            </VBox>
+                        </HBox>
+                        <Text text="{description}" maxLines="3" class="apiDescription"/>
                     </VBox>
-                    <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
-                    <Text text="{version}"/>
-                    <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
-                    <Text text=""/>
-                    <Text text="{path: 'lastModified', formatter: '.formatter.date'}" wrapping="false"/>
-                </cells>
-            </ColumnListItem>
-            <ColumnListItem id="internalItemTemplate" type="Navigation" press=".onItemPress">
-                <cells>
-                    <VBox class="apiNameCell">
-                        <Text text="{title}" class="apiName"/>
-                        <Text text="{description}" maxLines="2" class="apiDescription" visible="{= !!${description} }"/>
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="apiCardFooter">
+                        <HBox alignItems="Center">
+                            <Text text="{= ${version} ? 'Version ' + ${version} : '' }" class="apiCardMeta sapUiSmallMarginEnd"/>
+                            <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
+                        </HBox>
+                        <Text text="{path: 'lastModified', formatter: '.formatter.date'}" wrapping="false" class="apiCardMeta"/>
+                    </HBox>
+                </VBox>
+            </f:GridListItem>
+
+            <!-- Internal API (SharePoint document) card -->
+            <f:GridListItem id="internalItemTemplate" type="Active" press=".onItemPress" class="apiCardItem">
+                <VBox class="apiCard" justifyContent="SpaceBetween" height="100%">
+                    <VBox>
+                        <HBox alignItems="Start" class="apiCardHeader">
+                            <core:Icon src="{path: 'fileName', formatter: '.formatter.fileIcon'}" size="1.5rem" class="apiCardIcon"/>
+                            <VBox class="apiCardHeading">
+                                <Text text="{title}" maxLines="2" class="apiName"/>
+                                <Text text="{path: 'fileName', formatter: '.formatter.fileType'}" class="apiCardSubtitle"/>
+                            </VBox>
+                        </HBox>
+                        <Text text="{description}" maxLines="3" class="apiDescription"/>
                     </VBox>
-                    <Text text=""/>
-                    <Text text=""/>
-                    <Text text=""/>
-                    <Text text="{= ${author} || '-' }" maxLines="1"/>
-                    <Text text="{path: 'lastModified', formatter: '.formatter.date'}" wrapping="false"/>
-                </cells>
-            </ColumnListItem>
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="apiCardFooter">
+                        <Text text="{= ${author} || '' }" maxLines="1" class="apiCardMeta sapUiSmallMarginEnd"/>
+                        <Text text="{path: 'lastModified', formatter: '.formatter.date'}" wrapping="false" class="apiCardMeta"/>
+                    </HBox>
+                </VBox>
+            </f:GridListItem>
         </f:dependents>
     </f:DynamicPage>
 </mvc:View>

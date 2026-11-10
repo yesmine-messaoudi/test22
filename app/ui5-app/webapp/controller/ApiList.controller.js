@@ -25,7 +25,7 @@ sap.ui.define([
 
     return BaseController.extend("com.app.controller.ApiList", {
         onInit: function () {
-            this._oTable = this.byId("apiTable");
+            this._oTable = this.byId("apiGrid");
             this.setModel(new JSONModel({}), "view");
             this.getRouter().getRoute("apiList").attachPatternMatched(this._onRouteMatched, this);
         },

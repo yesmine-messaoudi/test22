@@ -265,51 +265,96 @@ body {
     }
 }
 
-/* ---------- API list table ---------- */
+/* ---------- API list: card grid ---------- */
 
-/* Centered, not wider than a comfortable reading width */
-.apiTable {
-    max-width: 80rem;
-    margin: 1.5rem auto 2rem;
-    padding: 0 1rem;
+.apiGrid {
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 2rem;
     box-sizing: border-box;
 }
 
-.apiTable .sapMListTblHeaderCell {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+.apiGrid .sapMListUl,
+.apiGrid .sapMGrowingList {
+    background: transparent;
 }
 
-.apiTable .sapMListTblHeaderCell .sapMText {
-    font-size: 0.8125rem;
+.apiGrid .sapUiLayoutCSSGridBoxLayoutContainer {
+    gap: 1.5rem !important;
+}
+
+.apiGridToolbar.sapMTB {
+    background: transparent;
+    border-bottom: none;
+    padding: 0 0 0.5rem;
+}
+
+.apiGridToolbar .sapMTitle {
+    font-size: 0.875rem;
     color: var(--sapContent_LabelColor);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
 }
 
-/* More room in each row */
-.apiTable .sapMListTblCell {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    vertical-align: middle;
+/* One card */
+.apiCardItem.sapFGLI {
+    border: none !important;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 0 1px rgba(1, 4, 38, 0.06), 0 2px 6px rgba(1, 4, 38, 0.08);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.apiNameCell {
-    max-width: 44rem;
-    padding-right: 2rem;
+.apiCardItem.sapFGLI:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(1, 4, 38, 0.08), 0 8px 16px rgba(1, 4, 38, 0.14);
+}
+
+.apiCard {
+    min-height: 13rem;
+    padding: 1.25rem;
+    box-sizing: border-box;
+}
+
+.apiCardHeader {
+    margin-bottom: 1rem;
+}
+
+.apiCardIcon {
+    color: var(--apiHubNavy) !important;
+    margin-right: 0.875rem;
+    flex-shrink: 0;
+}
+
+.apiCardHeading {
+    min-width: 0;
 }
 
 .apiName.sapMText {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.35;
     color: var(--apiHubNavy);
-    margin-bottom: 0.375rem;
+}
+
+.apiCardSubtitle.sapMText {
+    font-size: 0.8125rem;
+    color: var(--sapContent_LabelColor);
+    margin-top: 0.125rem;
 }
 
 .apiDescription.sapMText {
     font-size: 0.875rem;
-    line-height: 1.4;
-    color: var(--sapContent_LabelColor);
+    line-height: 1.45;
+    color: var(--sapTextColor);
+    padding-top: 1rem;
+    border-top: 1px solid var(--sapList_BorderColor);
+}
+
+.apiCardFooter {
+    margin-top: 1rem;
+}
+
+.apiCardMeta.sapMText {
+    font-size: 0.8125rem;
+    color: var(--sapLinkColor);
 }
 
 .apiListFilters {

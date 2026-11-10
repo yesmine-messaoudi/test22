@@ -23,8 +23,23 @@ sap.ui.define([
         delete: "Error"
     };
 
+    const FILE_TYPES = {
+        ppt: { icon: "sap-icon://ppt-attachment", label: "PowerPoint" },
+        pptx: { icon: "sap-icon://ppt-attachment", label: "PowerPoint" },
+        doc: { icon: "sap-icon://doc-attachment", label: "Word" },
+        docx: { icon: "sap-icon://doc-attachment", label: "Word" },
+        xls: { icon: "sap-icon://excel-attachment", label: "Excel" },
+        xlsx: { icon: "sap-icon://excel-attachment", label: "Excel" },
+        pdf: { icon: "sap-icon://pdf-attachment", label: "PDF" }
+    };
+
     function lower(sValue) {
         return (sValue || "").toLowerCase();
+    }
+
+    function extension(sFileName) {
+        const iDot = (sFileName || "").lastIndexOf(".");
+        return iDot === -1 ? "" : lower(sFileName.substring(iDot + 1));
     }
 
     return {
@@ -43,6 +58,19 @@ sap.ui.define([
             }
             const oDate = vValue instanceof Date ? vValue : new Date(String(vValue).replace(" ", "T"));
             return isNaN(oDate.getTime()) ? String(vValue) : DATE_FORMAT.format(oDate);
+        },
+
+        typeIcon: function (sType) {
+            return lower(sType) === "soap" ? "sap-icon://chain-link" : "sap-icon://synchronize";
+        },
+
+        // Icon and label from the document's file extension
+        fileIcon: function (sFileName) {
+            return FILE_TYPES[extension(sFileName)]?.icon || "sap-icon://document";
+        },
+
+        fileType: function (sFileName) {
+            return FILE_TYPES[extension(sFileName)]?.label || extension(sFileName).toUpperCase();
         },
 
         typeText: function (sType) {
