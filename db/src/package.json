@@ -6,7 +6,8 @@
     "start": "node node_modules/@sap/hdi-deploy/deploy.js"
   },
   "dependencies": {
-    "@sap/hdi-deploy": "^5"
+    "@sap/hdi-deploy": "^5",
+    "hdb": "^0.19.12"
   },
   "engines": {
     "node": "^20 || ^22"
