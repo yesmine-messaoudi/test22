@@ -1,3 +1,0 @@
-ID;package_id;portType;namespace;port;location;protocol;defaultStyle;transportProtocol
-bbbbbbbb-0000-0000-0000-000000000001;33333333-3333-3333-3333-333333333333;PurchaseOrderRequest_Out;urn:sap:po;PO_Port;/sap/bc/srt/po;SOAP 1.2;document;HTTP
-bbbbbbbb-0000-0000-0000-000000000002;44444444-4444-4444-4444-444444444444;MaterialDocumentCreate;urn:sap:md;MD_Port;/sap/bc/srt/md;SOAP 1.1;document;HTTP
