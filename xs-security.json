@@ -1,6 +1,34 @@
 {
-  "scopes": [],
+  "xsappname": "app",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.APIHubUser",
+      "description": "Use API Hub"
+    }
+  ],
   "attributes": [],
-  "role-templates": [],
-  "authorities-inheritance": false
+  "role-templates": [
+    {
+      "name": "APIHubUser",
+      "description": "API Hub user",
+      "scope-references": ["$XSAPPNAME.APIHubUser"],
+      "attribute-references": []
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "API Hub User",
+      "description": "Access to API Hub",
+      "role-template-references": ["$XSAPPNAME.APIHubUser"]
+    }
+  ],
+  "authorities-inheritance": false,
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://*.hana.ondemand.com/**",
+      "https://*.applicationstudio.cloud.sap/**",
+      "http://localhost:*/**"
+    ]
+  }
 }

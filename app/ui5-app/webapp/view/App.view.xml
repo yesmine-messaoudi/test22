@@ -1,91 +1,151 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <mvc:View
     controllerName="com.app.controller.App"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:tnt="sap.tnt"
-    xmlns:f="sap.f"
-    xmlns:card="sap.f.cards"
-    xmlns:core="sap.ui.core"
     displayBlock="true"
     height="100%">
-    <App id="app">
+    <App id="app" busy="{= !${user>/loaded} }" busyIndicatorDelay="0">
         <pages>
             <tnt:ToolPage id="toolPage">
                 <tnt:header>
                     <tnt:ToolHeader>
-                        <Image height="3rem"
-                            class="sapUiSmallMarginBegin"
-                            src="./assets/PI HUB.png" />
+                        <Image
+                            src="./assets/PI HUB.png"
+                            height="3rem"
+                            alt="{i18n>appTitle}"
+                            tooltip="{i18n>navHome}"
+                            press=".onLogoPress"
+                            class="sapUiSmallMarginBegin apiHubLogo"/>
                         <ToolbarSpacer/>
                         <IconTabHeader
-                            selectedKey="{/selectedKey}"
-                            items="{/navigation}"
-                            select=".onItemSelect"
+                            id="mainNav"
+                            selectedKey="{app>/selectedKey}"
+                            select=".onNavSelect"
                             mode="Inline"
                             backgroundDesign="Transparent"
                             class="nav-center"
-                            expandable="false"
-                            showOverflowSelectList="false">
+                            visible="{user>/hasAccess}">
                             <items>
-                                <IconTabFilter
-                                    text="{title}"
-                                    key="{key}">
-                                </IconTabFilter>
+                                <IconTabFilter key="home" text="{i18n>navHome}"/>
+                                <IconTabFilter key="standard" text="{i18n>navStandardApis}"/>
+                                <IconTabFilter key="internal" text="{i18n>navInternalApis}"/>
+                                <IconTabFilter key="mine" text="{i18n>navMyApis}"/>
                             </items>
                         </IconTabHeader>
                         <ToolbarSpacer/>
-                        <core:Icon id="chatbotIcon" src="sap-icon://discussion" class="sapUiSmallMarginEnd" press=".onChatbotPress" tooltip="Ask API"/>
-                        <Avatar id="userAvatar" 
-                            src="./assets/images.png" 
-                            displaySize="XS" 
-                            class="sapUiSmallMarginBegin" 
-                            press=".onAvatarPress"
+                        <Button
+                            icon="sap-icon://discussion"
+                            type="Transparent"
+                            tooltip="{i18n>chatOpen}"
+                            press=".onToggleChat"
+                            visible="{user>/hasAccess}">
+                            <layoutData>
+                                <OverflowToolbarLayoutData priority="NeverOverflow"/>
+                            </layoutData>
+                        </Button>
+                        <Avatar
+                            id="userAvatar"
+                            initials="{user>/initials}"
+                            displaySize="XS"
                             displayShape="Circle"
-                            backgroundColor="Accent6">
+                            backgroundColor="Accent6"
+                            tooltip="{user>/fullName}"
+                            press=".onAvatarPress"
+                            visible="{= !!${user>/id} }"
+                            class="sapUiSmallMarginEnd">
                             <layoutData>
                                 <OverflowToolbarLayoutData priority="NeverOverflow"/>
                             </layoutData>
                         </Avatar>
-                        <Popover id="avatarPopover" 
-                            placement="Bottom" 
-                            showHeader="false" 
-                            class="sapUiResponsivePadding--header sapUiResponsivePadding--footer">
-                            <List id="avatarList">
-                            </List>
-                        </Popover>
                     </tnt:ToolHeader>
                 </tnt:header>
                 <tnt:mainContents>
-                    <HBox fitContainer="true" renderType="Bare" class="sapUiNoContentPadding">
-                        <NavContainer id="navContainer" class="main-content-container" width="100%" flexGrow="1"/>
-                        <VBox id="chatbotPanel" width="400px" class="chatbot-panel sapUiNoContentPadding" visible="{viewModel>/isChatbotOpen}" flexShrink="0">
-                            <Toolbar class="sapUiSmallMarginBottom">
-                                <Title text="API Chatbot"/>
+                    <FlexBox height="100%" renderType="Bare" visible="{user>/hasAccess}" class="appBody">
+                        <NavContainer id="navContainer" height="100%">
+                            <layoutData>
+                                <FlexItemData growFactor="1" shrinkFactor="1" minWidth="0"/>
+                            </layoutData>
+                        </NavContainer>
+
+                        <!-- Chatbot side panel -->
+                        <VBox
+                            id="chatPanel"
+                            width="24rem"
+                            height="100%"
+                            renderType="Bare"
+                            visible="{app>/chatOpen}"
+                            class="chatbot-panel">
+                            <layoutData>
+                                <FlexItemData shrinkFactor="0"/>
+                            </layoutData>
+                            <Toolbar>
+                                <Title text="{i18n>chatTitle}" level="H3"/>
                                 <ToolbarSpacer/>
-                                <Button icon="sap-icon://decline" press=".onChatbotClose" type="Transparent" tooltip="Close Chat"/>
+                                <Button icon="sap-icon://decline" type="Transparent" tooltip="{i18n>chatClose}" press=".onCloseChat"/>
                             </Toolbar>
-                            <ScrollContainer
-                                id="chatMessagesContainer"
-                                height="100%"
-                                width="100%"
-                                horizontal="false"
-                                vertical="true"
-                                class="sapUiSmallMarginBottom">
-                                <VBox id="chatMessages" class="sapUiSmallMargin">
-                                </VBox>
-                            </ScrollContainer>
-                            <HBox width="100%" class="sapUiSmallMarginTopBottom sapUiSmallMarginBeginEnd">
-                                <Input id="chatInput" placeholder="Type your message..." width="100%" liveChange=".onChatInputLiveChange"/>
-                                <Button id="sendChatButton" icon="sap-icon://paper-plane" type="Emphasized" press=".onSendChatMessage" class="sapUiTinyMarginBegin" enabled="false"/>
+                            <List
+                                id="chatList"
+                                items="{app>/chatMessages}"
+                                noDataText="{i18n>chatEmpty}"
+                                showSeparators="None"
+                                class="chatbot-messages">
+                                <layoutData>
+                                    <FlexItemData growFactor="1"/>
+                                </layoutData>
+                                <FeedListItem
+                                    sender="{app>sender}"
+                                    text="{app>text}"
+                                    iconInitials="{app>initials}"
+                                    senderActive="false"
+                                    iconActive="false"/>
+                            </List>
+                            <HBox alignItems="Center" renderType="Bare" class="sapUiSmallMargin">
+                                <Input
+                                    id="chatInput"
+                                    placeholder="{i18n>chatPlaceholder}"
+                                    liveChange=".onChatLiveChange"
+                                    submit=".onSendChat">
+                                    <layoutData>
+                                        <FlexItemData growFactor="1"/>
+                                    </layoutData>
+                                </Input>
+                                <Button
+                                    id="chatSend"
+                                    icon="sap-icon://paper-plane"
+                                    type="Emphasized"
+                                    tooltip="{i18n>chatSend}"
+                                    enabled="false"
+                                    press=".onSendChat"
+                                    class="sapUiTinyMarginBegin"/>
                             </HBox>
                         </VBox>
-                    </HBox>
-                    <Toolbar class="appFooter">
-                        <Text text="© 2023 Your Company Name. All rights reserved." />
-                    </Toolbar>
+                    </FlexBox>
+
+                    <!-- Shown when the user is logged in but has no API Hub role -->
+                    <IllustratedMessage
+                        visible="{= ${user>/loaded} &amp;&amp; !${user>/hasAccess} }"
+                        illustrationType="sapIllus-ErrorScreen"
+                        title="{i18n>noAccessTitle}"
+                        description="{= ${user>/error} || ${i18n>noAccessText} }"/>
                 </tnt:mainContents>
             </tnt:ToolPage>
         </pages>
+
+        <dependents>
+            <Popover id="userPopover" showHeader="false" placement="Bottom" contentWidth="16rem">
+                <VBox alignItems="Center" class="sapUiSmallMargin">
+                    <Avatar initials="{user>/initials}" displaySize="M" backgroundColor="Accent6"/>
+                    <Title text="{user>/fullName}" wrapping="true" class="sapUiSmallMarginTop"/>
+                    <Text text="{user>/email}"/>
+                </VBox>
+                <footer>
+                    <Toolbar>
+                        <ToolbarSpacer/>
+                        <Button text="{i18n>logout}" icon="sap-icon://log" press=".onLogout"/>
+                    </Toolbar>
+                </footer>
+            </Popover>
+        </dependents>
     </App>
-</mvc:View> 
+</mvc:View>

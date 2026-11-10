@@ -1,0 +1,85 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
+    <!-- Add / edit a REST method or a SOAP operation -->
+    <Dialog id="itemDialog" title="{item>/dialogTitle}" contentWidth="34rem">
+        <form:SimpleForm
+            editable="true"
+            layout="ResponsiveGridLayout"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0"
+            columnsL="1"
+            columnsM="1"
+            visible="{= ${item>/kind} === 'method' }">
+            <Label text="{i18n>fieldMethod}" required="true"/>
+            <Select selectedKey="{item>/method}" width="100%">
+                <core:Item key="GET" text="GET"/>
+                <core:Item key="POST" text="POST"/>
+                <core:Item key="PUT" text="PUT"/>
+                <core:Item key="PATCH" text="PATCH"/>
+                <core:Item key="DELETE" text="DELETE"/>
+            </Select>
+
+            <Label text="{i18n>fieldPath}" required="true"/>
+            <Input
+                value="{item>/path}"
+                placeholder="/orders"
+                maxLength="200"
+                valueState="{item>/requiredState}"
+                valueStateText="{i18n>fieldRequired}"
+                liveChange=".onItemRequiredChange"/>
+
+            <Label text="{i18n>fieldSection}"/>
+            <Input value="{item>/section}" maxLength="100"/>
+
+            <Label text="{i18n>fieldDescription}"/>
+            <TextArea value="{item>/description}" rows="3" maxLength="500" growing="true"/>
+        </form:SimpleForm>
+
+        <form:SimpleForm
+            editable="true"
+            layout="ResponsiveGridLayout"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0"
+            columnsL="1"
+            columnsM="1"
+            visible="{= ${item>/kind} === 'operation' }">
+            <Label text="{i18n>fieldPortType}" required="true"/>
+            <Input
+                value="{item>/portType}"
+                maxLength="100"
+                valueState="{item>/requiredState}"
+                valueStateText="{i18n>fieldRequired}"
+                liveChange=".onItemRequiredChange"/>
+
+            <Label text="{i18n>fieldNamespace}"/>
+            <Input value="{item>/namespace}" maxLength="20"/>
+
+            <Label text="{i18n>fieldPort}"/>
+            <Input value="{item>/port}" maxLength="100"/>
+
+            <Label text="{i18n>fieldLocation}"/>
+            <Input value="{item>/location}" maxLength="100"/>
+
+            <Label text="{i18n>fieldProtocol}"/>
+            <Input value="{item>/protocol}" maxLength="100"/>
+
+            <Label text="{i18n>fieldTransportProtocol}"/>
+            <Input value="{item>/transportProtocol}" maxLength="100"/>
+
+            <Label text="{i18n>fieldDefaultStyle}"/>
+            <Input value="{item>/defaultStyle}" maxLength="100"/>
+        </form:SimpleForm>
+        <beginButton>
+            <Button text="{i18n>save}" type="Emphasized" press=".onItemDialogSave"/>
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>cancel}" press=".onItemDialogCancel"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

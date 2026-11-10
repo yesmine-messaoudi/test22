@@ -1,0 +1,188 @@
+<mvc:View
+    controllerName="com.app.controller.ApiDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:uxap="sap.uxap"
+    height="100%">
+    <uxap:ObjectPageLayout
+        id="objectPage"
+        showTitleInHeaderContent="true"
+        upperCaseAnchorBar="false"
+        busy="{view>/busy}"
+        busyIndicatorDelay="0"
+        class="apiHubPage">
+        <uxap:headerTitle>
+            <uxap:ObjectPageDynamicHeaderTitle>
+                <uxap:breadcrumbs>
+                    <Breadcrumbs>
+                        <Link text="{view>/listTitle}" press=".onNavToList"/>
+                    </Breadcrumbs>
+                </uxap:breadcrumbs>
+                <uxap:expandedHeading>
+                    <Title text="{title}" level="H2" wrapping="true"/>
+                </uxap:expandedHeading>
+                <uxap:snappedHeading>
+                    <FlexBox alignItems="Center">
+                        <Title text="{title}" level="H2" class="sapUiTinyMarginEnd"/>
+                        <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
+                    </FlexBox>
+                </uxap:snappedHeading>
+                <uxap:expandedContent>
+                    <Text text="{description}"/>
+                </uxap:expandedContent>
+                <uxap:actions>
+                    <Button text="{i18n>edit}" type="Emphasized" press=".onEditApi" visible="{view>/canEdit}"/>
+                    <Button text="{i18n>delete}" press=".onDeleteApi" visible="{view>/canEdit}"/>
+                </uxap:actions>
+                <uxap:navigationActions>
+                    <Button icon="sap-icon://decline" type="Transparent" tooltip="{i18n>close}" press=".onNavToList"/>
+                </uxap:navigationActions>
+            </uxap:ObjectPageDynamicHeaderTitle>
+        </uxap:headerTitle>
+
+        <uxap:headerContent>
+            <FlexBox wrap="Wrap">
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldType}"/>
+                    <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldVersion}"/>
+                    <Text text="{version}"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldStatus}"/>
+                    <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldLastModified}"/>
+                    <Text text="{lastModified}"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom" visible="{view>/isInternal}">
+                    <Label text="{i18n>fieldOwner}"/>
+                    <Text text="{createdBy}"/>
+                </VBox>
+            </FlexBox>
+        </uxap:headerContent>
+
+        <uxap:sections>
+            <!-- REST: methods -->
+            <uxap:ObjectPageSection title="{i18n>sectionMethods}" titleUppercase="false" visible="{= !${view>/isSoap} }">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection showTitle="false">
+                        <uxap:blocks>
+                            <Table
+                                id="methodsTable"
+                                items="{path: 'methods', parameters: {$orderby: 'section,path'}}"
+                                noDataText="{i18n>noMethods}"
+                                growing="true"
+                                growingThreshold="50">
+                                <headerToolbar>
+                                    <OverflowToolbar>
+                                        <Title text="{i18n>sectionMethods}" level="H3"/>
+                                        <ToolbarSpacer/>
+                                        <Button text="{i18n>addMethod}" icon="sap-icon://add" press=".onAddMethod" visible="{view>/canEdit}"/>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column width="7rem">
+                                        <Text text="{i18n>fieldMethod}"/>
+                                    </Column>
+                                    <Column>
+                                        <Text text="{i18n>fieldPath}"/>
+                                    </Column>
+                                    <Column minScreenWidth="Tablet" demandPopin="true">
+                                        <Text text="{i18n>fieldDescription}"/>
+                                    </Column>
+                                    <Column minScreenWidth="Desktop" demandPopin="true">
+                                        <Text text="{i18n>fieldSection}"/>
+                                    </Column>
+                                    <Column hAlign="End" width="6rem" visible="{view>/canEdit}">
+                                        <Text text="{i18n>colActions}"/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <ObjectStatus text="{method}" state="{path: 'method', formatter: '.formatter.methodState'}" inverted="true"/>
+                                            <Text text="{path}" class="apiPath"/>
+                                            <Text text="{description}"/>
+                                            <Text text="{section}"/>
+                                            <HBox justifyContent="End">
+                                                <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>edit}" press=".onEditMethod"/>
+                                                <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>delete}" press=".onDeleteMethod"/>
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- SOAP: operations -->
+            <uxap:ObjectPageSection title="{i18n>sectionOperations}" titleUppercase="false" visible="{= !!${view>/isSoap} }">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection showTitle="false">
+                        <uxap:blocks>
+                            <Table
+                                id="operationsTable"
+                                items="{path: 'operations', parameters: {$orderby: 'portType'}}"
+                                noDataText="{i18n>noOperations}"
+                                growing="true"
+                                growingThreshold="50">
+                                <headerToolbar>
+                                    <OverflowToolbar>
+                                        <Title text="{i18n>sectionOperations}" level="H3"/>
+                                        <ToolbarSpacer/>
+                                        <Button text="{i18n>addOperation}" icon="sap-icon://add" press=".onAddOperation" visible="{view>/canEdit}"/>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column>
+                                        <Text text="{i18n>fieldPortType}"/>
+                                    </Column>
+                                    <Column minScreenWidth="Tablet" demandPopin="true">
+                                        <Text text="{i18n>fieldPort}"/>
+                                    </Column>
+                                    <Column minScreenWidth="Tablet" demandPopin="true">
+                                        <Text text="{i18n>fieldProtocol}"/>
+                                    </Column>
+                                    <Column minScreenWidth="Desktop" demandPopin="true">
+                                        <Text text="{i18n>fieldTransportProtocol}"/>
+                                    </Column>
+                                    <Column minScreenWidth="Desktop" demandPopin="true">
+                                        <Text text="{i18n>fieldDefaultStyle}"/>
+                                    </Column>
+                                    <Column minScreenWidth="Desktop" demandPopin="true">
+                                        <Text text="{i18n>fieldLocation}"/>
+                                    </Column>
+                                    <Column hAlign="End" width="6rem" visible="{view>/canEdit}">
+                                        <Text text="{i18n>colActions}"/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <ObjectIdentifier title="{portType}" text="{namespace}"/>
+                                            <Text text="{port}"/>
+                                            <Text text="{protocol}"/>
+                                            <Text text="{transportProtocol}"/>
+                                            <Text text="{defaultStyle}"/>
+                                            <Text text="{location}" class="apiPath"/>
+                                            <HBox justifyContent="End">
+                                                <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>edit}" press=".onEditOperation"/>
+                                                <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>delete}" press=".onDeleteOperation"/>
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+        </uxap:sections>
+    </uxap:ObjectPageLayout>
+</mvc:View>

@@ -1,0 +1,107 @@
+<mvc:View
+    controllerName="com.app.controller.ApiList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    height="100%">
+    <f:DynamicPage id="apiListPage" toggleHeaderOnTitleClick="false" class="apiHubPage">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{view>/title}" level="H2"/>
+                </f:heading>
+                <f:expandedContent>
+                    <Text text="{view>/subtitle}"/>
+                </f:expandedContent>
+                <f:actions>
+                    <Button
+                        text="{i18n>createApi}"
+                        icon="sap-icon://add"
+                        type="Emphasized"
+                        press=".onCreate"
+                        visible="{view>/isMine}"/>
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader pinnable="false">
+                <FlexBox wrap="Wrap" alignItems="Center">
+                    <SearchField
+                        id="searchField"
+                        width="22rem"
+                        placeholder="{i18n>searchPlaceholder}"
+                        search=".onSearch"
+                        liveChange=".onSearchLiveChange"
+                        class="sapUiSmallMarginEnd sapUiTinyMarginBottom"/>
+                    <SegmentedButton id="typeFilter" selectedKey="all" selectionChange=".onTypeChange" class="sapUiTinyMarginBottom">
+                        <items>
+                            <SegmentedButtonItem key="all" text="{i18n>typeAll}"/>
+                            <SegmentedButtonItem key="rest" text="REST"/>
+                            <SegmentedButtonItem key="soap" text="SOAP"/>
+                        </items>
+                    </SegmentedButton>
+                </FlexBox>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <Table
+                id="apiTable"
+                growing="true"
+                growingThreshold="20"
+                growingScrollToLoad="true"
+                sticky="HeaderToolbar,ColumnHeaders"
+                noDataText="{view>/noDataText}"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{view>/tableTitle}" level="H3"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column width="35%">
+                        <Text text="{i18n>colApi}"/>
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>fieldType}"/>
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>fieldVersion}"/>
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>fieldStatus}"/>
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true" visible="{view>/showOwner}">
+                        <Text text="{i18n>fieldOwner}"/>
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="{i18n>fieldLastModified}"/>
+                    </Column>
+                    <Column hAlign="End" width="6rem" visible="{view>/isMine}">
+                        <Text text="{i18n>colActions}"/>
+                    </Column>
+                </columns>
+            </Table>
+        </f:content>
+
+        <f:dependents>
+            <!-- Row template; the table is bound in the controller depending on the page -->
+            <ColumnListItem id="apiItemTemplate" type="Navigation" press=".onItemPress">
+                <cells>
+                    <ObjectIdentifier title="{title}" text="{description}"/>
+                    <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
+                    <Text text="{version}"/>
+                    <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
+                    <Text text="{createdBy}"/>
+                    <Text text="{lastModified}"/>
+                    <HBox justifyContent="End">
+                        <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>edit}" press=".onEdit"/>
+                        <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>delete}" press=".onDelete"/>
+                    </HBox>
+                </cells>
+            </ColumnListItem>
+        </f:dependents>
+    </f:DynamicPage>
+</mvc:View>

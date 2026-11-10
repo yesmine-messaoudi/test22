@@ -1,0 +1,2 @@
+ID;title;description;version;status;type;createdBy;lastModified
+cccccccc-0000-0000-0000-000000000001;Customer Sync;Syncs customers between CRM and S/4HANA.;1.0.0;Active;rest;bob@aymax.fr;2025-06-01T12:00:00Z

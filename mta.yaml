@@ -1,14 +1,39 @@
 _schema-version: '3.3.0'
 ID: app
 version: 1.0.0
-description: "A simple CAP project."
+description: "API Hub - discover and manage APIs"
 parameters:
   enable-parallel-deployments: true
 
+# Generate HANA artifacts (db/src/gen) before packaging
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
 modules:
+  # CAP backend (runs from the project root with `cds-serve`)
   - name: app-srv
     type: nodejs
     path: .
+    build-parameters:
+      builder: custom
+      commands: []
+      ignore:
+        - node_modules/
+        - .git/
+        - app/
+        - test/
+        - db/src/
+        - db/node_modules/
+        - db/local.sqlite
+        - "*.sqlite"
+        - "Makefile*.mta"
+        - mta_archives/
+        - "*.mtar"
+        - srv/gen/
     parameters:
       memory: 512M
       disk-quota: 1G
@@ -19,10 +44,18 @@ modules:
     requires:
       - name: app-db
       - name: app-auth
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
 
+  # HANA HDI deployer (deploys db/src/gen, then stops)
   - name: app-db-deployer
     type: hdb
     path: db/src
+    build-parameters:
+      ignore:
+        - node_modules/
     parameters:
       buildpack: nodejs_buildpack
       no-route: true
@@ -34,6 +67,28 @@ modules:
       npm_config_cache: .npmcache
     requires:
       - name: app-db
+
+  # Approuter: XSUAA login + serves the UI5 app (app/ui5-app/webapp)
+  - name: app-router
+    type: approuter.nodejs
+    path: app/ui5-app
+    build-parameters:
+      ignore:
+        - node_modules/
+        - webapp/assets/astronautbg.png
+        - webapp/assets/bwp.jpg
+    parameters:
+      memory: 256M
+      disk-quota: 512M
+      keep-existing-routes: true
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: app-auth
 
 resources:
   - name: app-db

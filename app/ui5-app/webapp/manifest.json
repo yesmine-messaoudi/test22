@@ -3,8 +3,9 @@
   "sap.app": {
     "id": "com.app",
     "type": "application",
-    "title": "API Management App",
-    "description": "A Fiori Elements application for API Management",
+    "i18n": "i18n/i18n.properties",
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
     "applicationVersion": {
       "version": "1.0.0"
     },
@@ -34,101 +35,93 @@
       "id": "app"
     },
     "dependencies": {
-      "minUI5Version": "1.71",
+      "minUI5Version": "1.120.0",
       "libs": {
         "sap.ui.core": {},
         "sap.m": {},
-        "sap.tnt": {},
         "sap.f": {},
+        "sap.tnt": {},
+        "sap.uxap": {},
         "sap.ui.layout": {}
       }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
     },
     "resources": {
       "css": [
         {
           "uri": "css/style.css"
         }
-      ],
-      "resourceRoots": {
-        "com.app": "./"
-      }
+      ]
     },
     "models": {
       "": {
-        "type": "sap.ui.model.json.JSONModel",
-        "settings": {}
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": false,
+          "earlyRequests": true
+        }
       },
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "com.app.i18n.i18n",
-          "bundleLocale": "en"
+          "supportedLocales": [""],
+          "fallbackLocale": ""
         }
       }
     },
     "routing": {
       "config": {
         "routerClass": "sap.m.routing.Router",
+        "type": "View",
         "viewType": "XML",
-        "viewPath": "com.app.view",
+        "path": "com.app.view",
         "controlId": "navContainer",
         "controlAggregation": "pages",
-        "async": true
+        "async": true,
+        "bypassed": {
+          "target": "main"
+        }
       },
       "routes": [
         {
           "pattern": "",
           "name": "main",
-          "target": "page1"
+          "target": "main"
         },
         {
-          "pattern": "internalapi",
-          "name": "internalApi",
-          "target": "page2"
+          "pattern": "apis/{kind}/{id}",
+          "name": "apiDetail",
+          "target": "apiDetail"
         },
         {
-          "pattern": "standardapi",
-          "name": "standardApi",
-          "target": "page3"
-        },
-        {
-          "pattern": "manageyourapi",
-          "name": "manageYourApi",
-          "target": "page4"
-        },
-        {
-          "pattern": "manageusers",
-          "name": "manageUsers",
-          "target": "page5"
+          "pattern": "apis/{kind}:?query:",
+          "name": "apiList",
+          "target": "apiList"
         }
       ],
       "targets": {
-        "page1": {
-          "viewName": "Main",
-          "viewId": "page1",
-          "viewLevel": 1
+        "main": {
+          "name": "Main",
+          "id": "main",
+          "level": 1
         },
-        "page2": {
-          "viewName": "InternalApis",
-          "viewId": "page2",
-          "viewLevel": 2
+        "apiList": {
+          "name": "ApiList",
+          "id": "apiList",
+          "level": 2
         },
-        "page3": {
-          "viewName": "StandardApis",
-          "viewId": "page3",
-          "viewLevel": 2
-        },
-        "page4": {
-          "viewName": "ManageYourApi",
-          "viewId": "page4",
-          "viewLevel": 2
-        },
-        "page5": {
-          "viewName": "ManageUsers",
-          "viewId": "page5",
-          "viewLevel": 2
+        "apiDetail": {
+          "name": "ApiDetail",
+          "id": "apiDetail",
+          "level": 3
         }
       }
     }
   }
-} 
+}

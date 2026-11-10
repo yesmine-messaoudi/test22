@@ -1,11 +1,14 @@
 {
-    "name": "app-db-deployer",
-    "version": "1.0.0",
-    "description": "HDI Deployer",
-    "scripts": {
-      "start": "node node_modules/@sap/hdi-deploy/deploy.js"
-    },
-    "dependencies": {
-      "@sap/hdi-deploy": "^4.0.0"
-    }
+  "name": "app-db-deployer",
+  "version": "1.0.0",
+  "description": "HDI Deployer",
+  "scripts": {
+    "start": "node node_modules/@sap/hdi-deploy/deploy.js"
+  },
+  "dependencies": {
+    "@sap/hdi-deploy": "^5"
+  },
+  "engines": {
+    "node": "^20 || ^22"
   }
+}
