@@ -65,7 +65,7 @@
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
                     <Label text="{i18n>fieldLastModified}"/>
-                    <Text text="{api>/lastModified}"/>
+                    <Text text="{path: 'api>/lastModified', formatter: '.formatter.date'}"/>
                 </VBox>
             </FlexBox>
 
@@ -85,7 +85,7 @@
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
                     <Label text="{i18n>fieldLastModified}"/>
-                    <Text text="{api>/lastModified}"/>
+                    <Text text="{path: 'api>/lastModified', formatter: '.formatter.date'}"/>
                 </VBox>
             </FlexBox>
         </uxap:headerContent>

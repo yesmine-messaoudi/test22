@@ -1,5 +1,9 @@
-sap.ui.define([], function () {
+sap.ui.define([
+    "sap/ui/core/format/DateFormat"
+], function (DateFormat) {
     "use strict";
+
+    const DATE_FORMAT = DateFormat.getDateInstance({ style: "medium" });
 
     const STATUS_STATES = {
         active: "Success",
@@ -30,6 +34,15 @@ sap.ui.define([], function () {
 
         methodState: function (sMethod) {
             return METHOD_STATES[lower(sMethod)] || "None";
+        },
+
+        // "2025-07-06T23:09:06.197635" or "2025-07-15" -> "6 juil. 2025" (user's locale)
+        date: function (vValue) {
+            if (!vValue) {
+                return "";
+            }
+            const oDate = vValue instanceof Date ? vValue : new Date(String(vValue).replace(" ", "T"));
+            return isNaN(oDate.getTime()) ? String(vValue) : DATE_FORMAT.format(oDate);
         },
 
         typeText: function (sType) {

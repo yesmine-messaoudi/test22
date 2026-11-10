@@ -18,15 +18,15 @@
 
         <f:header>
             <f:DynamicPageHeader pinnable="false">
-                <FlexBox wrap="Wrap" alignItems="Center">
+                <FlexBox wrap="Wrap" alignItems="Center" class="apiListFilters">
                     <SearchField
                         id="searchField"
-                        width="22rem"
+                        width="24rem"
                         placeholder="{i18n>searchPlaceholder}"
                         search=".onSearch"
                         liveChange=".onSearchLiveChange"
-                        class="sapUiSmallMarginEnd sapUiTinyMarginBottom"/>
-                    <SegmentedButton id="typeFilter" selectedKey="all" selectionChange=".onTypeChange" visible="{= !${view>/isInternal} }" class="sapUiTinyMarginBottom">
+                        class="sapUiMediumMarginEnd sapUiTinyMarginBottom"/>
+                    <SegmentedButton id="typeFilter" width="15rem" selectedKey="all" selectionChange=".onTypeChange" visible="{= !${view>/isInternal} }" class="sapUiTinyMarginBottom">
                         <items>
                             <SegmentedButtonItem key="all" text="{i18n>typeAll}"/>
                             <SegmentedButtonItem key="rest" text="REST"/>
@@ -45,7 +45,7 @@
                 growingScrollToLoad="true"
                 sticky="HeaderToolbar,ColumnHeaders"
                 noDataText="{view>/noDataText}"
-                class="sapUiResponsiveMargin"
+                class="apiTable"
                 width="auto">
                 <headerToolbar>
                     <OverflowToolbar>
@@ -53,22 +53,22 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <columns>
-                    <Column width="40%">
+                    <Column>
                         <Text text="{= ${view>/isInternal} ? ${i18n>colDocument} : ${i18n>colApi} }"/>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
+                    <Column width="7rem" hAlign="Center" minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
                         <Text text="{i18n>fieldType}"/>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
+                    <Column width="6rem" hAlign="Center" minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
                         <Text text="{i18n>fieldVersion}"/>
                     </Column>
-                    <Column visible="{= !${view>/isInternal} }">
+                    <Column width="8rem" visible="{= !${view>/isInternal} }">
                         <Text text="{i18n>fieldStatus}"/>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true" visible="{view>/isInternal}">
+                    <Column width="14rem" minScreenWidth="Tablet" demandPopin="true" visible="{view>/isInternal}">
                         <Text text="{i18n>fieldAuthor}"/>
                     </Column>
-                    <Column minScreenWidth="Desktop" demandPopin="true">
+                    <Column width="9rem" hAlign="End" minScreenWidth="Desktop" demandPopin="true">
                         <Text text="{i18n>fieldLastModified}"/>
                     </Column>
                 </columns>
@@ -80,22 +80,28 @@
                  Both have one cell per column (hidden columns hide their cells). -->
             <ColumnListItem id="standardItemTemplate" type="Navigation" press=".onItemPress">
                 <cells>
-                    <ObjectIdentifier title="{title}" text="{description}" class="apiDescription"/>
+                    <VBox class="apiNameCell">
+                        <Text text="{title}" class="apiName"/>
+                        <Text text="{description}" maxLines="2" class="apiDescription" visible="{= !!${description} }"/>
+                    </VBox>
                     <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
                     <Text text="{version}"/>
                     <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
                     <Text text=""/>
-                    <Text text="{lastModified}"/>
+                    <Text text="{path: 'lastModified', formatter: '.formatter.date'}" wrapping="false"/>
                 </cells>
             </ColumnListItem>
             <ColumnListItem id="internalItemTemplate" type="Navigation" press=".onItemPress">
                 <cells>
-                    <ObjectIdentifier title="{title}" text="{description}" class="apiDescription"/>
+                    <VBox class="apiNameCell">
+                        <Text text="{title}" class="apiName"/>
+                        <Text text="{description}" maxLines="2" class="apiDescription" visible="{= !!${description} }"/>
+                    </VBox>
                     <Text text=""/>
                     <Text text=""/>
                     <Text text=""/>
-                    <Text text="{= ${author} || '-' }"/>
-                    <Text text="{lastModified}"/>
+                    <Text text="{= ${author} || '-' }" maxLines="1"/>
+                    <Text text="{path: 'lastModified', formatter: '.formatter.date'}" wrapping="false"/>
                 </cells>
             </ColumnListItem>
         </f:dependents>
