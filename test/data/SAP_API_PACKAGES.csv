@@ -1,0 +1,5 @@
+ID_PACKAGE;TITLE;DESCRIPTION;STATUS;VERSION;LAST_MODIFIED;TYPE
+1;Business Partner (A2X);Create, read, update and delete business partners, suppliers and customers.;Active;1.0.0;2025-03-14;REST
+2;Sales Order (A2X);Manage sales orders and their items.;Active;1.2.0;2025-05-02;REST
+3;Purchase Order Request;Send purchase orders to suppliers via SOAP.;Beta;2.0;2025-01-20;SOAP
+4;Material Document - Legacy;Post goods movements (replaced by the new Material Document API).;Deprecated;1.0;2023-11-08;SOAP

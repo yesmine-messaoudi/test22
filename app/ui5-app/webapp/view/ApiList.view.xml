@@ -26,7 +26,7 @@
                         search=".onSearch"
                         liveChange=".onSearchLiveChange"
                         class="sapUiSmallMarginEnd sapUiTinyMarginBottom"/>
-                    <SegmentedButton id="typeFilter" selectedKey="all" selectionChange=".onTypeChange" class="sapUiTinyMarginBottom">
+                    <SegmentedButton id="typeFilter" selectedKey="all" selectionChange=".onTypeChange" visible="{= !${view>/isInternal} }" class="sapUiTinyMarginBottom">
                         <items>
                             <SegmentedButtonItem key="all" text="{i18n>typeAll}"/>
                             <SegmentedButtonItem key="rest" text="REST"/>
@@ -53,17 +53,20 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <columns>
-                    <Column width="35%">
-                        <Text text="{i18n>colApi}"/>
+                    <Column width="40%">
+                        <Text text="{= ${view>/isInternal} ? ${i18n>colDocument} : ${i18n>colApi} }"/>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Column minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
                         <Text text="{i18n>fieldType}"/>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Column minScreenWidth="Tablet" demandPopin="true" visible="{= !${view>/isInternal} }">
                         <Text text="{i18n>fieldVersion}"/>
                     </Column>
-                    <Column>
+                    <Column visible="{= !${view>/isInternal} }">
                         <Text text="{i18n>fieldStatus}"/>
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true" visible="{view>/isInternal}">
+                        <Text text="{i18n>fieldAuthor}"/>
                     </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
                         <Text text="{i18n>fieldLastModified}"/>
@@ -73,13 +76,25 @@
         </f:content>
 
         <f:dependents>
-            <!-- Row template; the table is bound in the controller depending on the page -->
-            <ColumnListItem id="apiItemTemplate" type="Navigation" press=".onItemPress">
+            <!-- Row templates; the table is bound in the controller depending on the page.
+                 Both have one cell per column (hidden columns hide their cells). -->
+            <ColumnListItem id="standardItemTemplate" type="Navigation" press=".onItemPress">
                 <cells>
-                    <ObjectIdentifier title="{title}" text="{description}"/>
+                    <ObjectIdentifier title="{title}" text="{description}" class="apiDescription"/>
                     <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
                     <Text text="{version}"/>
                     <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
+                    <Text text=""/>
+                    <Text text="{lastModified}"/>
+                </cells>
+            </ColumnListItem>
+            <ColumnListItem id="internalItemTemplate" type="Navigation" press=".onItemPress">
+                <cells>
+                    <ObjectIdentifier title="{title}" text="{description}" class="apiDescription"/>
+                    <Text text=""/>
+                    <Text text=""/>
+                    <Text text=""/>
+                    <Text text="{= ${author} || '-' }"/>
                     <Text text="{lastModified}"/>
                 </cells>
             </ColumnListItem>

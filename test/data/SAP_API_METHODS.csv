@@ -1,0 +1,8 @@
+ID_METHOD;ID_PACKAGE;SECTION;METHOD;PATH;DESCRIPTION
+1;1;Business Partner;GET;/A_BusinessPartner;List business partners
+2;1;Business Partner;POST;/A_BusinessPartner;Create a business partner
+3;1;Business Partner;PATCH;/A_BusinessPartner('{id}');Update a business partner
+4;1;Address;GET;/A_BusinessPartnerAddress;List addresses
+5;2;Sales Order;GET;/A_SalesOrder;List sales orders
+6;2;Sales Order;POST;/A_SalesOrder;Create a sales order
+7;2;Items;DELETE;/A_SalesOrderItem('{id}');Delete an item

@@ -49,13 +49,18 @@ modules:
         properties:
           srv-url: ${default-url}
 
-  # HANA HDI deployer (deploys db/src/gen, then stops)
+  # HANA HDI deployer (deploys everything in db/src, then stops).
+  # Its root must be "db": the deployer only deploys the src/ and cfg/ folders of its root.
   - name: app-db-deployer
     type: hdb
-    path: db/src
+    path: db
     build-parameters:
       ignore:
         - node_modules/
+        - src/node_modules/
+        - hana/
+        - schema.cds
+        - "*.sqlite"
     parameters:
       buildpack: nodejs_buildpack
       no-route: true
@@ -67,6 +72,10 @@ modules:
       npm_config_cache: .npmcache
     requires:
       - name: app-db
+        properties:
+          TARGET_CONTAINER: ~{hdi-container-name}
+      # Gives the app SELECT on schema DBADMIN (see db/src/dbadmin.hdbgrants)
+      - name: apihub-dbadmin-grantor
 
   # Approuter: XSUAA login + serves the UI5 app (app/ui5-app/webapp)
   - name: app-router
@@ -98,6 +107,13 @@ resources:
       service-plan: hdi-shared
       config:
         database_id: "e0703fa6-6b82-4983-a980-59e5752d12bb"
+    properties:
+      hdi-container-name: ${service-name}
+
+  # User-provided service with a HANA user that can grant SELECT on schema DBADMIN.
+  # Create it once in the CF space before deploying (see README-HANA.md).
+  - name: apihub-dbadmin-grantor
+    type: org.cloudfoundry.existing-service
 
   - name: app-auth
     type: org.cloudfoundry.managed-service

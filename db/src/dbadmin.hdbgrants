@@ -1,0 +1,14 @@
+{
+  "apihub-dbadmin-grantor": {
+    "object_owner": {
+      "schema_privileges": [
+        { "reference": "DBADMIN", "privileges_with_grant_option": ["SELECT"] }
+      ]
+    },
+    "application_user": {
+      "schema_privileges": [
+        { "reference": "DBADMIN", "privileges": ["SELECT"] }
+      ]
+    }
+  }
+}

@@ -1,0 +1,3 @@
+ID;URL;FILE_NAME;AUTHOR;CREATED_DATE;MODIFIED_DATE;DOCUMENT_TITLE;SUMMARY;KEYWORDS
+01TESTDOC0001;https://example.sharepoint.com/sites/demo/Ordre%20de%20virement-V02.pdf;Ordre de virement-V02.pdf;;2025-02-10;2025-03-01;;Specification of the bank transfer order interface.;virement, banque, interface
+01TESTDOC0002;https://example.sharepoint.com/sites/demo/MI_Bon_Retour_Fournisseur.docx;MI_Bon_Retour_Fournisseur.docx;Alice Martin;2025-04-05;2025-04-20;Supplier return note;Functional spec of the supplier return note API.;MM, return, supplier

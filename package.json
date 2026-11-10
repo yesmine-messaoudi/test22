@@ -28,6 +28,9 @@
     "reset-local-db": "cds deploy"
   },
   "cds": {
+    "sql": {
+      "native_hana_associations": false
+    },
     "deploy": {
       "to": "hana",
       "force": true
@@ -41,6 +44,7 @@
           "options": {
             "model": [
               "db",
+              "db/hana",
               "srv",
               "app"
             ],

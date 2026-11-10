@@ -19,17 +19,29 @@
                     </Breadcrumbs>
                 </uxap:breadcrumbs>
                 <uxap:expandedHeading>
-                    <Title text="{title}" level="H2" wrapping="true"/>
+                    <Title text="{api>/title}" level="H2" wrapping="true"/>
                 </uxap:expandedHeading>
                 <uxap:snappedHeading>
                     <FlexBox alignItems="Center">
-                        <Title text="{title}" level="H2" class="sapUiTinyMarginEnd"/>
-                        <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
+                        <Title text="{api>/title}" level="H2" class="sapUiTinyMarginEnd"/>
+                        <ObjectStatus
+                            text="{path: 'api>/type', formatter: '.formatter.typeText'}"
+                            state="Information"
+                            inverted="true"
+                            visible="{= !${view>/isInternal} }"/>
                     </FlexBox>
                 </uxap:snappedHeading>
                 <uxap:expandedContent>
-                    <Text text="{description}"/>
+                    <Text text="{api>/description}"/>
                 </uxap:expandedContent>
+                <uxap:actions>
+                    <Button
+                        text="{i18n>openDocument}"
+                        icon="sap-icon://action"
+                        type="Emphasized"
+                        press=".onOpenDocument"
+                        visible="{= ${view>/isInternal} &amp;&amp; !!${api>/url} }"/>
+                </uxap:actions>
                 <uxap:navigationActions>
                     <Button icon="sap-icon://decline" type="Transparent" tooltip="{i18n>close}" press=".onNavToList"/>
                 </uxap:navigationActions>
@@ -37,35 +49,59 @@
         </uxap:headerTitle>
 
         <uxap:headerContent>
-            <FlexBox wrap="Wrap">
+            <!-- SAP standard API -->
+            <FlexBox wrap="Wrap" visible="{= !${view>/isInternal} }">
                 <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
                     <Label text="{i18n>fieldType}"/>
-                    <ObjectStatus text="{path: 'type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
+                    <ObjectStatus text="{path: 'api>/type', formatter: '.formatter.typeText'}" state="Information" inverted="true"/>
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
                     <Label text="{i18n>fieldVersion}"/>
-                    <Text text="{version}"/>
+                    <Text text="{api>/version}"/>
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
                     <Label text="{i18n>fieldStatus}"/>
-                    <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatter.statusState'}"/>
+                    <ObjectStatus text="{api>/status}" state="{path: 'api>/status', formatter: '.formatter.statusState'}"/>
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
                     <Label text="{i18n>fieldLastModified}"/>
-                    <Text text="{lastModified}"/>
+                    <Text text="{api>/lastModified}"/>
+                </VBox>
+            </FlexBox>
+
+            <!-- Internal API (SharePoint document) -->
+            <FlexBox wrap="Wrap" visible="{view>/isInternal}">
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldFileName}"/>
+                    <Text text="{api>/fileName}"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldAuthor}"/>
+                    <Text text="{= ${api>/author} || '-' }"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldCreated}"/>
+                    <Text text="{api>/createdDate}"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+                    <Label text="{i18n>fieldLastModified}"/>
+                    <Text text="{api>/lastModified}"/>
                 </VBox>
             </FlexBox>
         </uxap:headerContent>
 
         <uxap:sections>
-            <!-- REST: methods -->
-            <uxap:ObjectPageSection title="{i18n>sectionMethods}" titleUppercase="false" visible="{= !${view>/isSoap} }">
+            <!-- SAP standard REST API: methods -->
+            <uxap:ObjectPageSection
+                title="{i18n>sectionMethods}"
+                titleUppercase="false"
+                visible="{= !${view>/isInternal} &amp;&amp; !${view>/isSoap} }">
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection showTitle="false">
                         <uxap:blocks>
                             <Table
                                 id="methodsTable"
-                                items="{path: 'methods', parameters: {$orderby: 'section,path'}}"
+                                items="{api>/methods}"
                                 noDataText="{i18n>noMethods}"
                                 growing="true"
                                 growingThreshold="50">
@@ -91,10 +127,10 @@
                                 <items>
                                     <ColumnListItem>
                                         <cells>
-                                            <ObjectStatus text="{method}" state="{path: 'method', formatter: '.formatter.methodState'}" inverted="true"/>
-                                            <Text text="{path}" class="apiPath"/>
-                                            <Text text="{description}"/>
-                                            <Text text="{section}"/>
+                                            <ObjectStatus text="{api>method}" state="{path: 'api>method', formatter: '.formatter.methodState'}" inverted="true"/>
+                                            <Text text="{api>path}" class="apiPath"/>
+                                            <Text text="{api>description}"/>
+                                            <Text text="{api>section}"/>
                                         </cells>
                                     </ColumnListItem>
                                 </items>
@@ -104,14 +140,17 @@
                 </uxap:subSections>
             </uxap:ObjectPageSection>
 
-            <!-- SOAP: operations -->
-            <uxap:ObjectPageSection title="{i18n>sectionOperations}" titleUppercase="false" visible="{= !!${view>/isSoap} }">
+            <!-- SAP standard SOAP API: operations -->
+            <uxap:ObjectPageSection
+                title="{i18n>sectionOperations}"
+                titleUppercase="false"
+                visible="{= !${view>/isInternal} &amp;&amp; !!${view>/isSoap} }">
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection showTitle="false">
                         <uxap:blocks>
                             <Table
                                 id="operationsTable"
-                                items="{path: 'operations', parameters: {$orderby: 'portType'}}"
+                                items="{api>/operations}"
                                 noDataText="{i18n>noOperations}"
                                 growing="true"
                                 growingThreshold="50">
@@ -143,16 +182,33 @@
                                 <items>
                                     <ColumnListItem>
                                         <cells>
-                                            <ObjectIdentifier title="{portType}" text="{namespace}"/>
-                                            <Text text="{port}"/>
-                                            <Text text="{protocol}"/>
-                                            <Text text="{transportProtocol}"/>
-                                            <Text text="{defaultStyle}"/>
-                                            <Text text="{location}" class="apiPath"/>
+                                            <ObjectIdentifier title="{api>portType}" text="{api>namespace}"/>
+                                            <Text text="{api>port}"/>
+                                            <Text text="{api>protocol}"/>
+                                            <Text text="{api>transportProtocol}"/>
+                                            <Text text="{api>defaultStyle}"/>
+                                            <Text text="{api>location}" class="apiPath"/>
                                         </cells>
                                     </ColumnListItem>
                                 </items>
                             </Table>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- Internal API (SharePoint document): summary and keywords -->
+            <uxap:ObjectPageSection title="{i18n>sectionSummary}" titleUppercase="false" visible="{view>/isInternal}">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection showTitle="false">
+                        <uxap:blocks>
+                            <VBox>
+                                <Text text="{= ${api>/description} || ${i18n>noSummary} }" class="sapUiSmallMarginBottom"/>
+                                <Label text="{i18n>fieldKeywords}" class="sapUiSmallMarginTop"/>
+                                <Text text="{= ${api>/keywords} || '-' }"/>
+                                <Label text="{i18n>fieldUrl}" class="sapUiSmallMarginTop"/>
+                                <Link text="{api>/url}" href="{api>/url}" target="_blank" wrapping="true"/>
+                            </VBox>
                         </uxap:blocks>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>

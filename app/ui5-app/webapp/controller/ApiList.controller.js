@@ -7,14 +7,18 @@ sap.ui.define([
 ], function (BaseController, JSONModel, Filter, FilterOperator, Sorter) {
     "use strict";
 
-    // One read-only list page, two flavours: #/apis/standard (SAP APIs) and #/apis/internal
+    // One read-only list page, two flavours:
+    // #/apis/standard (SAP APIs) and #/apis/internal (SharePoint documents)
     const KINDS = {
         standard: {
-            path: "/StandardAPI", detailKind: "standard",
+            path: "/StandardAPI", detailKind: "standard", template: "standardItemTemplate",
+            // DESCRIPTION is a large text (NCLOB) in HANA, so only the title is searched
+            searchFields: ["title"],
             title: "standardApisTitle", subtitle: "standardApisSubtitle", noData: "noStandardApis"
         },
         internal: {
-            path: "/InternalApis", detailKind: "internal",
+            path: "/InternalApis", detailKind: "internal", template: "internalItemTemplate", isInternal: true,
+            searchFields: ["title", "description", "keywords"],
             title: "internalApisTitle", subtitle: "internalApisSubtitle", noData: "noInternalApis"
         }
     };
@@ -36,7 +40,8 @@ sap.ui.define([
                 title: this.getText(oKind.title),
                 subtitle: this.getText(oKind.subtitle),
                 noDataText: this.getText(oKind.noData),
-                tableTitle: this.getText("tableTitleNoCount")
+                tableTitle: this.getText("tableTitleNoCount"),
+                isInternal: !!oKind.isInternal
             });
 
             this.byId("searchField").setValue(oQuery.search || "");
@@ -44,7 +49,7 @@ sap.ui.define([
 
             this._oTable.bindItems({
                 path: oKind.path,
-                template: this.byId("apiItemTemplate"),
+                template: this.byId(oKind.template),
                 templateShareable: true,
                 parameters: { $count: true },
                 sorter: new Sorter("title"),
@@ -71,20 +76,20 @@ sap.ui.define([
         },
 
         _getFilters: function () {
+            const oKind = KINDS[this._sKind];
             const aFilters = [];
             const sQuery = this.byId("searchField").getValue().trim();
             const sType = this.byId("typeFilter").getSelectedKey();
 
             if (sQuery) {
                 aFilters.push(new Filter({
-                    filters: [
-                        new Filter({ path: "title", operator: FilterOperator.Contains, value1: sQuery, caseSensitive: false }),
-                        new Filter({ path: "description", operator: FilterOperator.Contains, value1: sQuery, caseSensitive: false })
-                    ],
+                    filters: oKind.searchFields.map(function (sPath) {
+                        return new Filter({ path: sPath, operator: FilterOperator.Contains, value1: sQuery, caseSensitive: false });
+                    }),
                     and: false
                 }));
             }
-            if (sType && sType !== "all") {
+            if (!oKind.isInternal && sType && sType !== "all") {
                 aFilters.push(new Filter({ path: "type", operator: FilterOperator.EQ, value1: sType, caseSensitive: false }));
             }
             return aFilters;
